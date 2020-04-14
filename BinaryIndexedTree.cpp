@@ -6,15 +6,15 @@ struct BinaryIndexedTree{
 // アーベル群に対応するデータ構造
 // 1要素更新:O(logN), 区間演算:O(logN)
   vector<T> m_BIT;
-
+ 
   BinaryIndexedTree(int N): m_BIT(N+1){}
-
+ 
   void add(int idx, T diff){
     for(int i=idx; i< m_BIT.size(); i+= i&-i){
       m_BIT.at(i)+= diff;
     }
   }
-
+ 
   T cumulative(int right) const{// [1, right)
     T ans= 0;
     for(int i=right-1; i>0; i-= i&-i){
@@ -22,13 +22,13 @@ struct BinaryIndexedTree{
     }
     return ans;
   }
-
+ 
   T range(int left, int right) const{// [left, right)
     return cumulative(right)- cumulative(left);
   }
-
-  void set_val(int idx, int val){
-    int a_i= range(idx, idx+ 1);
+ 
+  void set_val(int idx, T val){
+    T a_i= range(idx, idx+ 1);
     add(idx, val- a_i);
   }
 };
