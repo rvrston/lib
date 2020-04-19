@@ -54,6 +54,7 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
     int64_t a;
     is >> a;
     x= a;
+    return is;
   }
   friend ostream& operator << (ostream &os, const mint& x) noexcept{
       return os << x.rep;
