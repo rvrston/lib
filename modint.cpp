@@ -129,6 +129,7 @@ mint binom_modp(int n, int k){
   if(n < 0 || min(k,n-k) < 0) return 0;
   else{
 #if (MEMORY==1)
+    fact_modp_init();
     return g_mfac.at(n)* g_ifac.at(k)* g_ifac.at(n-k);
 #else
     k= min(k, n-k);
