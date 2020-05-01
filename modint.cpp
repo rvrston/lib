@@ -44,7 +44,7 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
   bool operator!=(const mint x) const {
     return rep!=x.rep;
   }
-  
+
   mint pow(int64_t d) const{ // d \geq 0
     if(d==0) return 1;
     else{
@@ -83,24 +83,36 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
 /* 階乗,二項係数 */
 #if (MEMORY==1)
 // 前処理として,階乗を配列に格納をするver.
-vector<mint> mfac(Nfac+1), ifac(Nfac+1);
+vector<mint> g_mfac(Nfac+1), g_ifac(Nfac+1);
 void fact_modp_init(int N= Nfac){
-  mfac.at(0)= 1;
-  mint buf;
-  for(int i=1; i<=N; i++){
-    buf= i;
-    mfac.at(i)= mfac.at(i-1)* buf;
-  }
+  static bool initialized = false;
+  if(!initialized){
+    g_mfac.at(0)= 1;
+    mint buf;
+    for(int i=1; i<=N; i++){
+      buf= i;
+      g_mfac.at(i)= g_mfac.at(i-1)* buf;
+    }
 
-  ifac.at(N)= mfac.at(N).inv();
-  for(int i=N; i>0; i--){
-    buf= i;
-    ifac.at(i-1)= ifac.at(i)* buf;
+    g_ifac.at(N)= g_mfac.at(N).inv();
+    for(int i=N; i>0; i--){
+      buf= i;
+      g_ifac.at(i-1)= g_ifac.at(i)* buf;
+    }
+
+    initialized= true;
   }
+}
+inline mint mfac(int N){
+  fact_modp_init();
+  return g_mfac.at(N);
+}
+inline mint ifac(int N){
+  fact_modp_init();
+  return g_ifac.at(N);
 }
 #else
 // 前処理を回避するver.
-void fact_modp_init(int N= Nfac){}
 mint mfac(int N){
   mint ans= 1;
   mint buf;
@@ -117,7 +129,7 @@ mint binom_modp(int n, int k){
   if(n < 0 || min(k,n-k) < 0) return 0;
   else{
 #if (MEMORY==1)
-    return mfac.at(n)* ifac.at(k)* ifac.at(n-k);
+    return g_mfac.at(n)* g_ifac.at(k)* g_ifac.at(n-k);
 #else
     k= min(k, n-k);
     mint ans= 1;
