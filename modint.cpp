@@ -38,7 +38,13 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
     ans*= x;
     return ans;
   }
-
+  bool operator==(const mint x) const {
+    return rep==x.rep;
+  }
+  bool operator!=(const mint x) const {
+    return rep!=x.rep;
+  }
+  
   mint pow(int64_t d) const{ // d \geq 0
     if(d==0) return 1;
     else{
