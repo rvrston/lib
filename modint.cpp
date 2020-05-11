@@ -46,14 +46,15 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
   }
 
   mint pow(int64_t d) const{ // d \geq 0
-    if(d==0) return 1;
-    else{
-      mint ans= pow(d>>1);
-      ans*= ans;
-      if(d&1){ ans*= *this; }
-
-      return ans;
+    mint ans= 1;
+    mint x= *this;
+    while(d > 0){
+      if(d&1){ ans*= x; }
+      d >>= 1;
+      x*= x;
     }
+
+    return ans;
   }
 
   friend istream& operator >> (istream &is, mint& x) noexcept{
