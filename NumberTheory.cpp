@@ -1,5 +1,7 @@
-inline int64_t ceiling_div(int64_t a, int64_t b){ // ceiling(a/b)= floor((a+b-1)/b)
-  return (a+b-1)/b;
+inline int64_t ceiling_div(int64_t a, int64_t b){
+  int64_t ans= ((a>=0 && b > 0) || (a<=0 && b < 0)) ? (abs(a)+abs(b)-1)/abs(b)
+                                                    : -abs(a)/abs(b);
+  return ans;
 }
 
 int64_t gcd(int64_t a, int64_t b){
