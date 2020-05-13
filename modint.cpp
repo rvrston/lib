@@ -1,9 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int64_t MOD= 1000000007;
-const int Nfac= 2000007;
-#define MEMORY 0 // 1/0: 階乗を配列に格納をする前処理をする/しない
+constexpr int64_t MOD= 1000000007;
+constexpr bool is_FACTORIAL_STORED= false; // 階乗を配列に格納をする前処理をする/しない
+constexpr int Nfac= is_FACTORIAL_STORED ? 2000007
+                                        : 0;
 /* 剰余環 Z/nZ */
 struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポートする構造体
   int64_t rep; // 出力すべき代表元 rep \in {0,1,..,MOD- 1}
@@ -82,67 +83,73 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
 };
 
 /* 階乗,二項係数 */
-#if (MEMORY==1)
-// 前処理として,階乗を配列に格納をするver.
 vector<mint> g_mfac(Nfac+1), g_ifac(Nfac+1);
 void fact_modp_init(int N= Nfac){
-  static bool initialized = false;
-  if(!initialized){
-    g_mfac.at(0)= 1;
-    mint buf;
-    for(int i=1; i<=N; i++){
-      buf= i;
-      g_mfac.at(i)= g_mfac.at(i-1)* buf;
-    }
+  if constexpr(is_FACTORIAL_STORED){
+    static bool initialized = false;
+    if(!initialized){
+      g_mfac.at(0)= 1;
+      for(int i=1; i<=N; i++){
+        g_mfac.at(i)= g_mfac.at(i-1)* (mint)i;
+      }
+  
+      g_ifac.at(N)= g_mfac.at(N).inv();
+      for(int i=N; i>0; i--){
+        g_ifac.at(i-1)= g_ifac.at(i)* (mint)i;
+      }
 
-    g_ifac.at(N)= g_mfac.at(N).inv();
-    for(int i=N; i>0; i--){
-      buf= i;
-      g_ifac.at(i-1)= g_ifac.at(i)* buf;
+      initialized= true;
     }
-
-    initialized= true;
+  }
+  else{
+    return;
   }
 }
+
 inline mint mfac(int N){
-  fact_modp_init();
-  return g_mfac.at(N);
-}
-inline mint ifac(int N){
-  fact_modp_init();
-  return g_ifac.at(N);
-}
-#else
-// 前処理を回避するver.
-mint mfac(int N){
-  mint ans= 1;
-  mint buf;
-  for(int i=1; i<=N; i++){
-    buf= i;
-    ans*= buf;
+  if constexpr(is_FACTORIAL_STORED){
+    fact_modp_init();
+    return g_mfac.at(N);
   }
-
-  return ans;
+  else{
+    mint ans= 1;
+    for(int i=1; i<=N; i++){
+      ans*= (mint)i;
+    }
+    return ans;
+  }
 }
-#endif
+
+inline mint ifac(int N){
+  if constexpr(is_FACTORIAL_STORED){
+    fact_modp_init();
+    return g_ifac.at(N);
+  }
+  else{
+    return mfac(N).inv();
+  }
+}
 
 mint binom_modp(int n, int k){
-  if(n < 0 || min(k,n-k) < 0) return 0;
-  else{
-#if (MEMORY==1)
-    fact_modp_init();
-    return g_mfac.at(n)* g_ifac.at(k)* g_ifac.at(n-k);
-#else
-    k= min(k, n-k);
-    mint ans= 1;
-    for(int i=1; i<=k; i++){
-      mint num= n-i+1;
-      ans*= num;
+  if constexpr(is_FACTORIAL_STORED){
+    if(n < 0 || min(k,n-k) < 0) return 0;
+    else{
+      fact_modp_init();
+      return g_mfac.at(n)* g_ifac.at(k)* g_ifac.at(n-k);
     }
-    ans/= mfac(k);
+  }
+  else{
+    if(n < 0 || min(k,n-k) < 0) return 0;
+    else{
+      k= min(k, n-k);
+      mint ans= 1;
+      for(int i=1; i<=k; i++){
+        ans*= (mint)(n-i+1);
+      }
+      ans/= mfac(k);
 
-    return ans;
-#endif
+      return ans;
+    }
   }
 }
 
