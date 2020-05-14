@@ -10,7 +10,7 @@ struct BinaryIndexedTree{
   BinaryIndexedTree(int N): m_BIT(N+1){}
  
   void add(int idx, T diff){
-    for(int i=idx; i< m_BIT.size(); i+= i&-i){
+    for(size_t i=idx; i< m_BIT.size(); i+= i&-i){
       m_BIT.at(i)+= diff;
     }
   }
