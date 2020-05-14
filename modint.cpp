@@ -100,6 +100,7 @@ void fact_modp_init(int N= Nfac){
 
       initialized= true;
     }
+    else{ return; }
   }
   else{
     return;
