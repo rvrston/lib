@@ -6,11 +6,28 @@ struct BinaryIndexedTree{
 // アーベル群に対応するデータ構造
 // 1要素更新:O(logN), 区間演算:O(logN)
   vector<T> m_BIT;
+  size_t m_sz_pow2;
  
-  BinaryIndexedTree(int N): m_BIT(N+1){}
+  BinaryIndexedTree(int N)
+  : m_BIT(N+1)
+#ifdef __GNUC__
+  , m_sz_pow2(1 << (31- __builtin_clz(N)))
+#endif
+  {
+#ifndef __GNUC__
+    m_sz_pow2= N;
+    m_sz_pow2|= (m_sz_pow2 >>  1);
+    m_sz_pow2|= (m_sz_pow2 >>  2);
+    m_sz_pow2|= (m_sz_pow2 >>  4);
+    m_sz_pow2|= (m_sz_pow2 >>  8);
+    m_sz_pow2|= (m_sz_pow2 >> 16);
+    m_sz_pow2++;
+    m_sz_pow2 >>= 1;
+#endif
+  }
  
   void add(int idx, T diff){
-    for(int i=idx; i< m_BIT.size(); i+= i&-i){
+    for(size_t i=idx; i< m_BIT.size(); i+= i&-i){
       m_BIT.at(i)+= diff;
     }
   }
@@ -30,6 +47,17 @@ struct BinaryIndexedTree{
   void set_val(int idx, T val){
     T a_i= range(idx, idx+ 1);
     add(idx, val- a_i);
+  }
+
+  size_t lower_bound(T val) const{// a[i]>= 0 のとき
+    size_t offset= 0;
+    for(size_t s= m_sz_pow2; s>0; s>>=1){
+      if(offset+ s < m_BIT.size() && m_BIT.at(offset+ s) < val){
+        offset+= s;
+        val-= m_BIT.at(offset);
+      }
+    }
+    return offset+ 1;
   }
 };
 
