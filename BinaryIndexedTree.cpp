@@ -26,7 +26,7 @@ struct BinaryIndexedTree{
 #endif
   }
  
-  void add(int idx, T diff){
+  void add(int idx, T diff){ /* 1-indexed */
     for(size_t i=idx; i< m_BIT.size(); i+= i&-i){
       m_BIT.at(i)+= diff;
     }
