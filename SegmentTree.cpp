@@ -13,7 +13,7 @@ struct SegmentTree{
   SegmentTree(const vector<T> &data): m_id(numeric_limits<T>::max()), m_SegT(2*data.size()){
     int N= m_SegT.size() >> 1;
     for(int i=0; i<N; i++){
-      m_SegT.at(i+offset)= data.at(i);
+      m_SegT.at(i+N)= data.at(i);
     }
     for(int i=N-1; i>0; i--){
       m_SegT.at(i)= op(m_SegT.at(i << 1), m_SegT.at((i << 1) | 1));
