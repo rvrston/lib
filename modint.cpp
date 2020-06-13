@@ -160,4 +160,29 @@ mint multiset_modp(int n, int r){
     return binom_modp(n+r-1, r);
   }
 }
+
+mint derangement_modp(int n){
+  if constexpr(is_FACTORIAL_STORED){
+    fact_modp_init();
+
+    mint ans= 0;
+    for(int i=0; i<=n; i+=2){
+      ans+= g_mfac.at(n)* g_ifac.at(i);
+    }
+    for(int i=1; i<=n; i+=2){
+      ans-= g_mfac.at(n)* g_ifac.at(i);
+    }
+    return ans;
+  }
+  else{
+    mint term= mfac(n);
+
+    mint ans= term;
+    for(int i=1; i<=n; i++){
+      term/= (mint)(-i);
+      ans+= term;
+    }
+    return ans;
+  }
+}
 // ^^^ テンプレここまで ^^^
