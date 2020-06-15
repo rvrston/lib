@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-constexpr int64_t MOD= 1000000007;
+constexpr int64_t MOD= 1'000'000'007;
 constexpr bool is_FACTORIAL_STORED= false; // 階乗を配列に格納をする前処理をする/しない
 constexpr int Nfac= is_FACTORIAL_STORED ? 2000007
                                         : 0;
@@ -46,7 +46,9 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
     return rep!=x.rep;
   }
 
-  mint pow(int64_t d) const{ // d \geq 0
+  mint pow(int64_t d) const{
+    assert(d >= 0); // ここで引っかかったら this.pow(d)= 0 or this.pow(-d).inv() のどちらかを選べ
+    assert(!(*this==0 && d==0)); //   this.pow(d)= 0 or 1           　     のどちらかを選べ
     mint ans= 1;
     mint x= *this;
     while(d > 0){
