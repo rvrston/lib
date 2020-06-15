@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int64_t MOD= 1000000007;
+const int64_t MOD= 1'000'000'007;
 const int Nfac= 2000007;
 #define MEMORY 0 // 1/0: 階乗を配列に格納をする前処理をする/しない
 /* 剰余環 Z/nZ */
@@ -45,7 +45,9 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
     return rep!=x.rep;
   }
 
-  mint pow(int64_t d) const{ // d \geq 0
+  mint pow(int64_t d) const{
+    assert(d >= 0); // ここで引っかかったら this.pow(d)= 0 or this.pow(-d).inv() のどちらかを選べ
+    assert(!(*this==0 && d==0)); //   this.pow(d)= 0 or 1           　     のどちらかを選べ
     mint ans= 1;
     mint x= *this;
     while(d > 0){
