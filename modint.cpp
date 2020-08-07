@@ -3,7 +3,7 @@ using namespace std;
 
 constexpr int64_t MOD= 1'000'000'007;
 constexpr bool is_FACTORIAL_STORED= false; // 階乗を配列に格納をする前処理をする/しない
-constexpr int Nfac= is_FACTORIAL_STORED ? 2000007
+constexpr int Nfac= is_FACTORIAL_STORED ? 500'007
                                         : 0;
 /* 剰余環 Z/nZ */
 struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポートする構造体

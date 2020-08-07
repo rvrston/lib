@@ -4,11 +4,11 @@ using Graph= vector<vector<int>>;
 const int INF= 1e9;
 
 void solve(const Graph &weights, Graph *dp){
-  const int N= weights.size();
+  const size_t N= weights.size();
 
-  for(int k=0; k<N; k++){
-    for(int from=0; from<N; from++){
-      for(int to=0; to<N; to++){
+  for(size_t k=0; k<N; k++){
+    for(size_t from=0; from<N; from++){
+      for(size_t to=0; to<N; to++){
         dp->at(from).at(to)= min(dp->at(from).at(to), dp->at(from).at(k)+ dp->at(k).at(to));
       }
     }

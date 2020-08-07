@@ -4,10 +4,10 @@ using namespace std;
 using coord= pair<int, int>;
 
 int BFS(const vector<string> &board, coord s, coord g){
-  const int TBC= INT_MAX;
-  const char block= '#';
-  const int H= board.size();
-  const int W= board.at(0).size();
+  constexpr int TBC= INT_MAX;
+  constexpr char block= '#';
+  const int H= int(board.size());
+  const int W= int(board.at(0).size());
 
   const vector<coord> diff= {make_pair(0,-1), make_pair(-1,0), make_pair(1,0), make_pair(0,1) // 上下4方向
                              // make_pair(-1,-1), make_pair(1,-1), make_pair(-1,1), make_pair(1,1) // 斜め4方向
@@ -20,16 +20,13 @@ int BFS(const vector<string> &board, coord s, coord g){
 
   while( !bfs.empty() ){
     coord p= bfs.front();
-    int x,y;
-    tie(x, y)= p;
+    auto [x,y]= p;
     bfs.pop();
     if(p==g){
       break;
     }
     else{
-      for(const auto& ds:diff){
-        int dx,dy;
-        tie(dx, dy)= ds;
+      for(const auto& [dx,dy]:diff){
         if(x+dx <= -1 || x+dx >= H || y+dy <= -1 || y+dy >= W) continue;
         else if(board.at(x+dx).at(y+dy)==block){
           continue;
