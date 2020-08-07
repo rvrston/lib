@@ -4,11 +4,11 @@ using namespace std;
 using coord= pair<int, int>;
 
 bool BFS(const vector<string> &board, coord s, coord g){ // 辺の重みが0/1のときは両端キューを使って重み0の辺を辿るときpush_front, 重み1の辺を辿るときpush_backすると簡単にBFSできる。
-  const int dist= 2; // 探索する深さの最大値
-  const int TBC= INT_MAX;
-  const char block= '#';
-  const int H= board.size();
-  const int W= board.at(0).size();
+  constexpr int dist= 2; // 探索する深さの最大値
+  constexpr int TBC= INT_MAX;
+  constexpr char block= '#';
+  const int H= int(board.size());
+  const int W= int(board.at(0).size());
 
   const vector<coord> diff= {make_pair(0,-1), make_pair(-1,0), make_pair(1,0), make_pair(0,1) // 上下4方向
                              // make_pair(-1,-1), make_pair(1,-1), make_pair(-1,1), make_pair(1,1) // 斜め4方向
@@ -22,8 +22,7 @@ bool BFS(const vector<string> &board, coord s, coord g){ // 辺の重みが0/1�
   bool ans= false;
   while( !bfs.empty() ){
     coord p= bfs.front();
-    int x,y;
-    tie(x, y)= p;
+    auto [x,y]= p;
     bfs.pop_front();
     if(p==g && checked.at(x).at(y) <= dist){
       ans= true;
@@ -33,9 +32,7 @@ bool BFS(const vector<string> &board, coord s, coord g){ // 辺の重みが0/1�
       break;
     }
     else{
-      for(const auto& ds:diff){
-        int dx,dy;
-        tie(dx, dy)= ds;
+      for(const auto& [dx,dy]:diff){
         if(x+dx <= -1 || x+dx >= H || y+dy <= -1 || y+dy >= W) continue;
         else if(board.at(x+dx).at(y+dy)!=block && checked.at(x+dx).at(y+dy)==TBC){
           checked.at(x+dx).at(y+dy)= checked.at(x).at(y);
