@@ -5,12 +5,12 @@ using Graph= vector<vector<edge>>;
 const int64_t INF= 1e15;
 
 void solve(const Graph &gph, int s, vector<int64_t> *dists){
-  const int N= gph.size();
+  const size_t N= gph.size();
 
   dists->at(s)= 0;
   queue<int> s_inf;
-  for(int d=1; d<=N; d++){
-    for(int from=0; from<N; from++){
+  for(size_t d=1; d<=N; d++){
+    for(size_t from=0; from<N; from++){
       for(auto e:gph.at(from)){
         int to; int64_t cost;
         tie(to, cost)= e;
