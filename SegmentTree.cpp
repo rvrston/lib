@@ -11,16 +11,17 @@ struct SegmentTree{
 
   SegmentTree(int N): m_id(numeric_limits<T>::max()), m_SegT(2*N, m_id){}
   SegmentTree(const vector<T> &data): m_id(numeric_limits<T>::max()), m_SegT(2*data.size()){
-    int N= m_SegT.size() >> 1;
-    for(int i=0; i<N; i++){
+    size_t N= m_SegT.size() >> 1;
+    for(size_t i=0; i<N; i++){
       m_SegT.at(i+N)= data.at(i);
     }
-    for(int i=N-1; i>0; i--){
+    for(size_t i=N-1; i>0; i--){
       m_SegT.at(i)= op(m_SegT.at(i << 1), m_SegT.at((i << 1) | 1));
     }
   }
 
-  void set_val(int idx, T val){
+  /* メンバ関数の引数は 0-indexed */
+  void set_val(size_t idx, T val){
     idx+= m_SegT.size() >> 1;
     m_SegT.at(idx)= val;
     while((idx >> 1) > 0){
@@ -29,7 +30,7 @@ struct SegmentTree{
     }
   }
 
-  T range(int left, int right) const{// [left, right)
+  T range(size_t left, size_t right) const{// [left, right)
     left += m_SegT.size() >> 1;
     right+= m_SegT.size() >> 1;
     T calc_l= m_id;
