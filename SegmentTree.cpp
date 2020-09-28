@@ -3,14 +3,14 @@ using namespace std;
 
 template <typename T>
 struct SegmentTree{
-  T m_id;
+  const T e_T= numeric_limits<T>::max();
   T op(const T &a, const T &b) const{
     return min(a, b);
   }
   vector<T> m_SegT;
 
-  SegmentTree(int N): m_id(numeric_limits<T>::max()), m_SegT(2*N, m_id){}
-  SegmentTree(const vector<T> &data): m_id(numeric_limits<T>::max()), m_SegT(2*data.size()){
+  SegmentTree(int N): m_SegT(2*N, e_T){}
+  SegmentTree(const vector<T> &data): m_SegT(2*data.size()){
     size_t N= m_SegT.size() >> 1;
     for(size_t i=0; i<N; i++){
       m_SegT.at(i+N)= data.at(i);
@@ -33,8 +33,8 @@ struct SegmentTree{
   T range(size_t left, size_t right) const{// [left, right)
     left += m_SegT.size() >> 1;
     right+= m_SegT.size() >> 1;
-    T calc_l= m_id;
-    T calc_r= m_id;
+    T calc_l= e_T;
+    T calc_r= e_T;
 
     while(left < right){
       if(left&1){
