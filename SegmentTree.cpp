@@ -21,7 +21,7 @@ struct SegmentTree{
   }
 
   /* メンバ関数の引数は 0-indexed */
-  void set_val(size_t idx, T val){
+  void set_val(size_t idx, const T& val){
     idx+= m_SegT.size() >> 1;
     m_SegT.at(idx)= val;
     while((idx >> 1) > 0){
@@ -30,7 +30,7 @@ struct SegmentTree{
     }
   }
 
-  T range(size_t left, size_t right) const{// [left, right)
+  T fold(size_t left, size_t right) const{// [left, right)
     left += m_SegT.size() >> 1;
     right+= m_SegT.size() >> 1;
     T calc_l= e_T;
@@ -57,16 +57,16 @@ int main() {
   int N,Q;
   cin >> N >> Q;
 
-  SegmentTree<int> st(N);
+  SegmentTree<int> segtree(N);
   int buf;
   for(int i=0; i<N; i++){
     cin >> buf;
-    st.set_val(i, buf);
+    segtree.set_val(i, buf);
   }
 
   int left,right;
   for(int i=0; i<Q; i++){
     cin >> left >> right;
-    cout << st.range(left, right) << endl;
+    cout << segtree.fold(left, right) << endl;
   }
 }
