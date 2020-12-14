@@ -21,6 +21,11 @@ struct SegmentTree{
   }
 
   /* メンバ関数の引数は 0-indexed */
+  T get(size_t idx) const{
+    idx+= m_SegT.size() >> 1;
+    return m_SegT.at(idx);
+  }
+  
   void set_val(size_t idx, const T& val){
     idx+= m_SegT.size() >> 1;
     m_SegT.at(idx)= val;
