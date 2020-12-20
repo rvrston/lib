@@ -11,9 +11,7 @@ void solve(const Graph &gph, int s, vector<int64_t> *dists){
   queue<int> s_inf;
   for(size_t d=1; d<=N; d++){
     for(size_t from=0; from<N; from++){
-      for(auto e:gph.at(from)){
-        int to; int64_t cost;
-        tie(to, cost)= e;
+      for(const auto& [to, cost]:gph.at(from)){
         if(dists->at(to) > dists->at(from)+ cost){
           dists->at(to)= dists->at(from)+ cost;
 
@@ -30,10 +28,7 @@ void solve(const Graph &gph, int s, vector<int64_t> *dists){
     while( !s_inf.empty() ){
       int from= s_inf.front();
       s_inf.pop();
-      for(auto e:gph.at(from)){
-        int to;
-        tie(to, ignore)= e;
-
+      for(const auto& [to, cost]:gph.at(from)){
         if(dists->at(to) > -INF){
           dists->at(to)= -INF;
           s_inf.push(to);
