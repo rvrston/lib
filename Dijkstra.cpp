@@ -9,16 +9,13 @@ void solve(const Graph &gph, int s, vector<int64_t> *dists){
   priority_queue<path, vector<path>, greater<path>> search;
   search.push(make_pair(0, s));
   while( !search.empty() ){
-    int64_t d_tmp; int from_tmp;
-    tie(d_tmp, from_tmp)= search.top();
+    auto [d_tmp, from_tmp]= search.top();
     search.pop();
 
     if(dists->at(from_tmp) <= d_tmp){ continue; }
     else{
       dists->at(from_tmp)= d_tmp;
-      for(auto e:gph.at(from_tmp)){
-        int64_t d_to; int to_tmp;
-        tie(d_to, to_tmp)= e;
+      for(const auto& [d_to, to_tmp]:gph.at(from_tmp)){
         search.push(make_pair(d_tmp+ d_to, to_tmp));
       }
     }
