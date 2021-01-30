@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+constexpr bool ONE_INDEXED= false; // falseなら 0-indexed
 template <typename T>
 struct BinaryIndexedTree{
 // アーベル群に対応するデータ構造
@@ -27,12 +28,14 @@ struct BinaryIndexedTree{
   }
  
   void add(int idx, T diff){ /* 1-indexed */
+    if constexpr(not ONE_INDEXED){ idx++; }
     for(size_t i=idx; i< m_BIT.size(); i+= i&-i){
       m_BIT.at(i)+= diff;
     }
   }
  
   T cumulative(int right) const{// [1, right)
+    if constexpr(not ONE_INDEXED){ right++; }
     T ans= 0;
     for(int i=right-1; i>0; i-= i&-i){
       ans+= m_BIT.at(i);
@@ -57,7 +60,8 @@ struct BinaryIndexedTree{
         val-= m_BIT.at(offset);
       }
     }
-    return offset+ 1;
+    if constexpr(ONE_INDEXED){ return offset+ 1; }
+    else                     { return offset; }
   }
 };
 
@@ -67,20 +71,18 @@ int main(){
 
   BinaryIndexedTree<int64_t> data(N);
   int64_t buf;
-  for(int i=1; i<=N; i++){// 1-indexed
+  for(int i=0; i<N; i++){
     cin >> buf;
     data.add(i, buf);
   }
 
-  int query,buf1,buf2;
+  int64_t query,buf1,buf2;
   for(int i=0; i<Q; i++){
     cin >> query >> buf1 >> buf2;
     if(query==0){
-      buf1++; // 0-indexed -> 1-indexed
       data.add(buf1, buf2);
     }
     else{
-      buf1++; buf2++; // 0-indexed -> 1-indexed
       cout << data.range(buf1, buf2) << endl;
     }
   }
