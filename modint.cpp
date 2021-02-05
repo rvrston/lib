@@ -69,9 +69,21 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
   friend ostream& operator << (ostream &os, const mint& x) noexcept{
       return os << x.rep;
   }
-  // MOD が素数(<=> Z/nZ が体)のとき
+  // gcd(this,MOD)= 1 (<=> this∈(Z/nZ)* ) のとき
   mint inv() const{
-    return pow(MOD-2);
+  // this* x0+ MOD* y0= r0
+  // this* x1+ MOD* y1= r1, 初期条件(x0,y0,r0,x1,y1,r1)=(1,0,this,0,1,MOD)から、割り算で右辺を小さくしていく。
+    int64_t r0= rep, x0= 1, y0= 0, r1= MOD, x1= 0, y1= 1;
+    while(r1 > 0){
+      int64_t q= r0/ r1;
+      int64_t r= r0% r1;
+      int64_t x2= x0- q*x1;
+      int64_t y2= y0- q*y1;
+      x0= x1; y0= y1; r0= r1;
+      x1= x2; y1= y2; r1= r;
+    }
+    assert(r0==1);
+    return mint(x0);
   }
   mint& operator/=(const mint& x){
     *this *= x.inv();
