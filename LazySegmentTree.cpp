@@ -84,6 +84,8 @@ struct mint{ // Z/nZ に関する演算(n:素数の場合は除算も)をサポ�
   }
 };// mint
 
+constexpr bool has_AUXILIARY_DATA= true;
+
 int floor_log2(int N){
   assert(N > 0);
   #ifdef __GNUC__
@@ -135,11 +137,14 @@ private: // このブロックでモノイドを指定
   }
   vector<T> m_aux;
   void init(int N){
-    m_aux.emplace_back(T(1));
-    int logN= floor_log2(N);
-    for(int i= 1; i<= logN; i++){
-      T ret= m_aux.back()* mint(10).pow(1<<(i-1)) + m_aux.back();
-      m_aux.emplace_back(ret);
+    if constexpr(not has_AUXILIARY_DATA){ return; }
+    else{
+      m_aux.emplace_back(T(1));
+      int logN= floor_log2(N);
+      for(int i= 1; i<= logN; i++){
+        T ret= m_aux.back()* T(10).pow(1<<(i-1)) + m_aux.back();
+        m_aux.emplace_back(ret);
+      }
     }
   }
 
