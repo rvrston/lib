@@ -81,7 +81,7 @@ void DFS2(const Graph& tree, int parent, int root, const vector<DPState>* bottom
   }
 }
 
-void ReRooting(const Graph& tree, vector<DPState>* bottomup, vector<DPState>* topdown){
+void ReRootingDP(const Graph& tree, vector<DPState>* bottomup, vector<DPState>* topdown){
   DFS1(tree, nil, 0, bottomup);
   DFS2(tree, nil, 0, bottomup, topdown);
 }
@@ -123,7 +123,7 @@ int main(){
 
   vector<DPState> bottomup(N);
   vector<DPState> topdown(N);
-  ReRooting(tree, &bottomup, &topdown);
+  ReRootingDP(tree, &bottomup, &topdown);
 
   for(int v=0; v<N; v++){
     DPState ans= bottomup.at(v).SubRoot()* topdown.at(v);
